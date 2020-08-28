@@ -1,7 +1,6 @@
 package ru.mustaev.restapp.controller;
 
 import org.springframework.web.bind.annotation.*;
-import ru.mustaev.restapp.domain.Address;
 import ru.mustaev.restapp.domain.Client;
 import ru.mustaev.restapp.service.ClientService;
 
@@ -33,7 +32,7 @@ public class ClientController {
 
     @PostMapping("/client")
     public Client addClient(@RequestBody Client client){
-        client.getAddresses().stream().forEach(address -> address.setClient(client));
+        client.getAddresses().forEach(address -> address.setClient(client));
         return clientService.save(client);
     }
 
