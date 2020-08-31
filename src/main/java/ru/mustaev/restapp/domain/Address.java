@@ -1,7 +1,6 @@
 package ru.mustaev.restapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import org.hibernate.annotations.OnDelete;
 
 import javax.persistence.*;
 

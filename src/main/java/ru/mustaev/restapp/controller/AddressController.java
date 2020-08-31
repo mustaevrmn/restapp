@@ -3,6 +3,7 @@ package ru.mustaev.restapp.controller;
 import org.springframework.web.bind.annotation.*;
 import ru.mustaev.restapp.domain.Address;
 import ru.mustaev.restapp.domain.Client;
+import ru.mustaev.restapp.exception.ResourceNotFoundException;
 import ru.mustaev.restapp.service.AddressService;
 import ru.mustaev.restapp.service.ClientService;
 
@@ -25,8 +26,9 @@ public class AddressController {
     }
 
     @PutMapping("/client/{id}/address")
-    public Address addByClientId(@RequestBody Address address, @PathVariable Long id){
-        Optional<Client> client = clientService.findById(id);
+    public Address addByClientId(@RequestBody Address address, @PathVariable Long id) throws ResourceNotFoundException {
+        Optional<Client> client = Optional.ofNullable(clientService.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Client not found for this id: " + id)));
         if(client.isPresent()) {
             address.setClient(client.get());
             client.get().getAddresses().add(address);
@@ -35,7 +37,9 @@ public class AddressController {
     }
 
     @DeleteMapping("/address/{id}")
-    public void deleteAddress(@PathVariable Long id){
+    public void deleteAddress(@PathVariable Long id) throws ResourceNotFoundException {
+        addressService.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Address not found for this id: " + id));
         addressService.deleteById(id);
     }
 

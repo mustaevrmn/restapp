@@ -2,6 +2,7 @@ package ru.mustaev.restapp.controller;
 
 import org.springframework.web.bind.annotation.*;
 import ru.mustaev.restapp.domain.Client;
+import ru.mustaev.restapp.exception.ResourceNotFoundException;
 import ru.mustaev.restapp.service.ClientService;
 
 import java.util.List;
@@ -37,12 +38,15 @@ public class ClientController {
     }
 
     @GetMapping("/client/{id}")
-    public Optional<Client> findClient(@PathVariable Long id){
-        return clientService.findById(id);
+    public Optional<Client> findClient(@PathVariable Long id) throws ResourceNotFoundException {
+        return Optional.ofNullable(clientService.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Client not found for this id: " + id)));
     }
 
     @DeleteMapping("/client/{id}")
-    public void deleteClient(@PathVariable Long id){
+    public void deleteClient(@PathVariable Long id) throws ResourceNotFoundException {
+        clientService.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Client not found for this id: " + id));
         clientService.deleteById(id);
     }
 }

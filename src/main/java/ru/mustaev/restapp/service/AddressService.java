@@ -5,6 +5,7 @@ import ru.mustaev.restapp.domain.Address;
 import ru.mustaev.restapp.repo.AddressRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AddressService {
@@ -18,6 +19,9 @@ public class AddressService {
     }
     public Address save(Address address){
         return addressRepository.save(address);
+    }
+    public Optional<Address> findById(Long id){
+        return addressRepository.findById(id);
     }
     public void deleteById(Long id){
         addressRepository.deleteById(id);
